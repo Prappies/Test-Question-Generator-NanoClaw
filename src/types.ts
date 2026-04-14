@@ -55,6 +55,7 @@ export interface NewMessage {
   reply_to_message_id?: string;
   reply_to_message_content?: string;
   reply_to_sender_name?: string;
+  discord_user_id?: string; // Discord user ID for OAuth
 }
 
 export interface ScheduledTask {

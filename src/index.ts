@@ -253,6 +253,9 @@ async function processGroupMessages(chatJid: string): Promise<boolean> {
 
   const prompt = formatMessages(missedMessages, TIMEZONE);
 
+  // Extract Discord user ID from the last message (if available)
+  const discordUserId = missedMessages[missedMessages.length - 1].discord_user_id;
+
   // Advance cursor so the piping path in startMessageLoop won't re-fetch
   // these messages. Save the old cursor so we can roll back on error.
   const previousCursor = lastAgentTimestamp[chatJid] || '';
@@ -283,7 +286,7 @@ async function processGroupMessages(chatJid: string): Promise<boolean> {
   let hadError = false;
   let outputSentToUser = false;
 
-  const output = await runAgent(group, prompt, chatJid, async (result) => {
+  const output = await runAgent(group, prompt, chatJid, discordUserId, async (result) => {
     // Streaming output callback — called for each agent result
     if (result.result) {
       const raw =
@@ -340,6 +343,7 @@ async function runAgent(
   group: RegisteredGroup,
   prompt: string,
   chatJid: string,
+  discordUserId: string | undefined,
   onOutput?: (output: ContainerOutput) => Promise<void>,
 ): Promise<'success' | 'error'> {
   const isMain = group.isMain === true;
@@ -392,6 +396,7 @@ async function runAgent(
         chatJid,
         isMain,
         assistantName: ASSISTANT_NAME,
+        discordUserId,
       },
       (proc, containerName) =>
         queue.registerProcess(chatJid, proc, containerName, group.folder),
@@ -579,6 +584,14 @@ async function main(): Promise<void> {
   for (const [jid, group] of Object.entries(registeredGroups)) {
     ensureOneCLIAgent(jid, group);
   }
+
+  // Start Google OAuth callback server
+  const { startOAuthCallbackServer, setPublicCallbackUrl } = await import('./google-oauth.js');
+  const oauthCallbackUrl = process.env.OAUTH_CALLBACK_URL;
+  if (oauthCallbackUrl) {
+    setPublicCallbackUrl(oauthCallbackUrl);
+  }
+  startOAuthCallbackServer();
 
   restoreRemoteControl();
 

@@ -1,4 +1,4 @@
-import { Client, Events, GatewayIntentBits, Message, TextChannel } from 'discord.js';
+import { Client, Events, GatewayIntentBits, Message, TextChannel, REST, Routes, SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 
 import { ASSISTANT_NAME, TRIGGER_PATTERN } from '../config.js';
 import { readEnvFile } from '../env.js';
@@ -23,6 +23,7 @@ export class DiscordChannel implements Channel {
   private client: Client | null = null;
   private opts: DiscordChannelOpts;
   private botToken: string;
+  private pendingInteractions: Map<string, ChatInputCommandInteraction> = new Map();
 
   constructor(botToken: string, opts: DiscordChannelOpts) {
     this.botToken = botToken;
@@ -146,6 +147,7 @@ export class DiscordChannel implements Channel {
         content,
         timestamp,
         is_from_me: false,
+        discord_user_id: sender, // Pass Discord user ID for OAuth
       });
 
       logger.info(
@@ -159,8 +161,82 @@ export class DiscordChannel implements Channel {
       logger.error({ err: err.message }, 'Discord client error');
     });
 
+    // Handle slash commands
+    this.client.on(Events.InteractionCreate, async (interaction) => {
+      if (!interaction.isChatInputCommand()) return;
+
+      const commandInteraction = interaction as ChatInputCommandInteraction;
+      const channelId = commandInteraction.channelId;
+      const chatJid = `dc:${channelId}`;
+      const timestamp = new Date().toISOString();
+      const senderName =
+        commandInteraction.member && 'displayName' in commandInteraction.member
+          ? (commandInteraction.member.displayName as string)
+          : commandInteraction.user.displayName || commandInteraction.user.username;
+      const sender = commandInteraction.user.id;
+      const msgId = commandInteraction.id;
+
+      // Determine chat name
+      let chatName: string;
+      if (commandInteraction.guild) {
+        const textChannel = commandInteraction.channel as TextChannel;
+        chatName = `${commandInteraction.guild.name} #${textChannel?.name || 'unknown'}`;
+      } else {
+        chatName = senderName;
+      }
+
+      // Convert slash command to message content
+      let content = '';
+      if (commandInteraction.commandName === 'login') {
+        content = `@${ASSISTANT_NAME} /login`;
+      } else if (commandInteraction.commandName === 'quiz') {
+        const url = commandInteraction.options.getString('url');
+        content = url ? `@${ASSISTANT_NAME} /quiz ${url}` : `@${ASSISTANT_NAME} /quiz`;
+      }
+
+      // Acknowledge the interaction immediately (ephemeral = only visible to user)
+      await commandInteraction.deferReply({ flags: 64 }); // 64 = MessageFlags.Ephemeral
+
+      // Store the interaction by channel ID so we can reply to it later
+      this.pendingInteractions.set(channelId, commandInteraction);
+
+      // Clean up after 15 minutes (Discord interaction token expires after 15 min)
+      setTimeout(() => {
+        this.pendingInteractions.delete(channelId);
+      }, 15 * 60 * 1000);
+
+      // Store chat metadata
+      const isGroup = commandInteraction.guild !== null;
+      this.opts.onChatMetadata(chatJid, timestamp, chatName, 'discord', isGroup);
+
+      // Only deliver for registered groups
+      const group = this.opts.registeredGroups()[chatJid];
+      if (!group) {
+        await commandInteraction.editReply('This channel is not registered with NanoClaw.');
+        this.pendingInteractions.delete(channelId);
+        return;
+      }
+
+      // Deliver message
+      this.opts.onMessage(chatJid, {
+        id: msgId,
+        chat_jid: chatJid,
+        sender,
+        sender_name: senderName,
+        content,
+        timestamp,
+        is_from_me: false,
+        discord_user_id: sender, // Pass Discord user ID for OAuth
+      });
+
+      logger.info(
+        { chatJid, chatName, sender: senderName, command: commandInteraction.commandName },
+        'Discord slash command stored',
+      );
+    });
+
     return new Promise<void>((resolve) => {
-      this.client!.once(Events.ClientReady, (readyClient) => {
+      this.client!.once(Events.ClientReady, async (readyClient) => {
         logger.info(
           { username: readyClient.user.tag, id: readyClient.user.id },
           'Discord bot connected',
@@ -169,11 +245,44 @@ export class DiscordChannel implements Channel {
         console.log(
           `  Use /chatid command or check channel IDs in Discord settings\n`,
         );
+
+        // Register slash commands
+        await this.registerSlashCommands(readyClient.user.id);
+
         resolve();
       });
 
       this.client!.login(this.botToken);
     });
+  }
+
+  private async registerSlashCommands(clientId: string): Promise<void> {
+    const commands = [
+      new SlashCommandBuilder()
+        .setName('login')
+        .setDescription('Set up your Google account for quiz generation'),
+      new SlashCommandBuilder()
+        .setName('quiz')
+        .setDescription('Generate a quiz from a URL or PDF')
+        .addStringOption(option =>
+          option.setName('url')
+            .setDescription('URL to generate quiz from (or upload PDF as attachment)')
+            .setRequired(false)
+        ),
+    ].map(command => command.toJSON());
+
+    const rest = new REST().setToken(this.botToken);
+
+    try {
+      logger.info('Registering Discord slash commands...');
+      await rest.put(
+        Routes.applicationCommands(clientId),
+        { body: commands },
+      );
+      logger.info('Discord slash commands registered successfully');
+    } catch (error) {
+      logger.error({ error }, 'Failed to register Discord slash commands');
+    }
   }
 
   async sendMessage(jid: string, text: string): Promise<void> {
@@ -184,6 +293,28 @@ export class DiscordChannel implements Channel {
 
     try {
       const channelId = jid.replace(/^dc:/, '');
+
+      // Check if this is a response to a slash command
+      const pendingInteraction = this.pendingInteractions.get(channelId);
+
+      if (pendingInteraction) {
+        // Reply to the slash command interaction
+        const MAX_LENGTH = 2000;
+        if (text.length <= MAX_LENGTH) {
+          await pendingInteraction.editReply(text);
+        } else {
+          // First message via editReply, then follow-ups
+          await pendingInteraction.editReply(text.slice(0, MAX_LENGTH));
+          for (let i = MAX_LENGTH; i < text.length; i += MAX_LENGTH) {
+            await pendingInteraction.followUp(text.slice(i, i + MAX_LENGTH));
+          }
+        }
+        this.pendingInteractions.delete(channelId);
+        logger.info({ jid, length: text.length }, 'Discord slash command reply sent');
+        return;
+      }
+
+      // Normal message (not a slash command response)
       const channel = await this.client.channels.fetch(channelId);
 
       if (!channel || !('send' in channel)) {

@@ -1,0 +1,44 @@
+[17:52:59.003] [32mINFO[39m (34737): [36mStopped orphaned containers[39m
+    [35mcount[39m: 1
+    [35mnames[39m: ["nanoclaw-discord-general-1776206183806"]
+[17:52:59.007] [32mINFO[39m (34737): [36mDatabase initialized[39m
+[17:52:59.007] [32mINFO[39m (34737): [36mState loaded[39m
+    [35mgroupCount[39m: 1
+[17:52:59.021] [32mINFO[39m (34737): [36mPublic OAuth callback URL set[39m
+    [35murl[39m: "https://scarcity-uncorrupt-octopus.ngrok-free.dev/oauth/callback"
+[17:52:59.037] [32mINFO[39m (34737): [36mGoogle OAuth callback server listening on http://localhost:3737[39m
+[17:53:00.485] [32mINFO[39m (34737): [36mDiscord bot connected[39m
+    [35musername[39m: "Anti-Yapper#4821"
+    [35mid[39m: "1493311877315301529"
+
+  Discord bot: Anti-Yapper#4821
+  Use /chatid command or check channel IDs in Discord settings
+
+[17:53:00.487] [32mINFO[39m (34737): [36mRegistering Discord slash commands...[39m
+[17:53:00.717] [32mINFO[39m (34737): [36mDiscord slash commands registered successfully[39m
+[17:53:00.718] [32mINFO[39m (34737): [36mScheduler loop started[39m
+[17:53:00.720] [32mINFO[39m (34737): [36mIPC watcher started (per-group namespaces)[39m
+[17:53:00.722] [32mINFO[39m (34737): [36mNanoClaw running (default trigger: @Andy)[39m
+[17:53:30.772] [32mINFO[39m (34737): [36m[cleanup] Done — freed ~0K[39m
+[17:53:44.467] [32mINFO[39m (34737): [36mDiscord slash command stored[39m
+    [35mchatJid[39m: "dc:1424256626881200130"
+    [35mchatName[39m: "Org.ChemistryTutor’sWife's server #general"
+    [35msender[39m: "Org.ChemistryTutor’sWife"
+    [35mcommand[39m: "login"
+[17:53:44.752] [32mINFO[39m (34737): [36mNew messages[39m
+    [35mcount[39m: 1
+[17:53:44.762] [32mINFO[39m (34737): [36mProcessing messages[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+    [35mmessageCount[39m: 1
+[17:53:45.081] [33mWARN[39m (34737): [36mOneCLI gateway not reachable — container will have no credentials[39m
+    [35mcontainerName[39m: "nanoclaw-discord-general-1776207224979"
+[17:53:45.081] [32mINFO[39m (34737): [36mSpawning container agent[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+    [35mcontainerName[39m: "nanoclaw-discord-general-1776207224979"
+    [35mmountCount[39m: 7
+    [35misMain[39m: false
+[17:53:49.893] [32mINFO[39m (34737): [36mAgent output: 25 chars[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+[17:53:50.183] [32mINFO[39m (34737): [36mDiscord slash command reply sent[39m
+    [35mjid[39m: "dc:1424256626881200130"
+    [35mlength[39m: 25

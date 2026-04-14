@@ -43,6 +43,7 @@ export interface ContainerInput {
   isScheduledTask?: boolean;
   assistantName?: string;
   script?: string;
+  discordUserId?: string; // Discord user ID for OAuth
 }
 
 export interface ContainerOutput {
@@ -196,6 +197,27 @@ function buildVolumeMounts(
     readonly: false,
   });
 
+  // Fallback credentials directory when OneCLI is not available
+  // The container's entrypoint can source /workspace/env-dir/env to get API keys
+  const envDir = path.join(DATA_DIR, 'env');
+  if (fs.existsSync(path.join(envDir, 'env'))) {
+    mounts.push({
+      hostPath: envDir,
+      containerPath: '/workspace/env-dir',
+      readonly: true,
+    });
+  }
+
+  // Google OAuth tokens directory (shared across all groups)
+  // Stores per-user OAuth tokens for Google Slides/Drive access
+  const oauthTokensDir = path.join(DATA_DIR, 'google-oauth-tokens');
+  fs.mkdirSync(oauthTokensDir, { recursive: true });
+  mounts.push({
+    hostPath: oauthTokensDir,
+    containerPath: '/workspace/google-oauth-tokens',
+    readonly: false,
+  });
+
   // Copy agent-runner source into a per-group writable location so agents
   // can customize it (add tools, change behavior) without affecting other
   // groups. Recompiled on container startup via entrypoint.sh.
@@ -246,11 +268,29 @@ async function buildContainerArgs(
   mounts: VolumeMount[],
   containerName: string,
   agentIdentifier?: string,
+  discordUserId?: string,
 ): Promise<string[]> {
   const args: string[] = ['run', '-i', '--rm', '--name', containerName];
 
   // Pass host timezone so container's local time matches the user's
   args.push('-e', `TZ=${TIMEZONE}`);
+
+  // Pass Discord user ID for OAuth token lookup
+  if (discordUserId) {
+    args.push('-e', `DISCORD_USER_ID=${discordUserId}`);
+  }
+
+  // Pass OAuth callback URL (will be set by ngrok or public domain)
+  const oauthCallbackUrl = process.env.OAUTH_CALLBACK_URL || 'http://localhost:3737/oauth/callback';
+  args.push('-e', `OAUTH_CALLBACK_URL=${oauthCallbackUrl}`);
+
+  // Pass Google OAuth credentials for workspace-mcp
+  if (process.env.GOOGLE_OAUTH_CLIENT_ID) {
+    args.push('-e', `GOOGLE_OAUTH_CLIENT_ID=${process.env.GOOGLE_OAUTH_CLIENT_ID}`);
+  }
+  if (process.env.GOOGLE_OAUTH_CLIENT_SECRET) {
+    args.push('-e', `GOOGLE_OAUTH_CLIENT_SECRET=${process.env.GOOGLE_OAUTH_CLIENT_SECRET}`);
+  }
 
   // OneCLI gateway handles credential injection — containers never see real secrets.
   // The gateway intercepts HTTPS traffic and injects API keys or OAuth tokens.
@@ -315,6 +355,7 @@ export async function runContainerAgent(
     mounts,
     containerName,
     agentIdentifier,
+    input.discordUserId,
   );
 
   logger.debug(
