@@ -11,7 +11,7 @@ import { getAccessToken } from './google-oauth.js';
  */
 export async function createPresentation(
   userId: string,
-  title: string
+  title: string,
 ): Promise<{ presentationId: string; presentationUrl: string } | null> {
   const accessToken = await getAccessToken(userId);
   if (!accessToken) {
@@ -20,22 +20,28 @@ export async function createPresentation(
   }
 
   try {
-    const response = await fetch('https://slides.googleapis.com/v1/presentations', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      'https://slides.googleapis.com/v1/presentations',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title }),
       },
-      body: JSON.stringify({ title }),
-    });
+    );
 
     if (!response.ok) {
       const error = await response.text();
-      logger.error({ userId, status: response.status, error }, 'Failed to create presentation');
+      logger.error(
+        { userId, status: response.status, error },
+        'Failed to create presentation',
+      );
       return null;
     }
 
-    const presentation = await response.json() as any;
+    const presentation = (await response.json()) as any;
     const presentationId = presentation.presentationId;
     const presentationUrl = `https://docs.google.com/presentation/d/${presentationId}/edit`;
 
@@ -54,7 +60,7 @@ export async function createPresentation(
 export async function addSlides(
   userId: string,
   presentationId: string,
-  slides: Array<{ title: string; content: string }>
+  slides: Array<{ title: string; content: string }>,
 ): Promise<boolean> {
   const accessToken = await getAccessToken(userId);
   if (!accessToken) {
@@ -74,9 +80,9 @@ export async function addSlides(
         createSlide: {
           objectId: slideId,
           slideLayoutReference: {
-            predefinedLayout: 'TITLE_AND_BODY'
-          }
-        }
+            predefinedLayout: 'TITLE_AND_BODY',
+          },
+        },
       });
 
       // Add title text
@@ -84,8 +90,8 @@ export async function addSlides(
         insertText: {
           objectId: slideId,
           text: slide.title,
-          insertionIndex: 0
-        }
+          insertionIndex: 0,
+        },
       });
 
       // Add content text
@@ -93,8 +99,8 @@ export async function addSlides(
         insertText: {
           objectId: slideId,
           text: slide.content,
-          insertionIndex: 0
-        }
+          insertionIndex: 0,
+        },
       });
     }
 
@@ -103,20 +109,26 @@ export async function addSlides(
       {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ requests }),
-      }
+      },
     );
 
     if (!response.ok) {
       const error = await response.text();
-      logger.error({ userId, presentationId, status: response.status, error }, 'Failed to add slides');
+      logger.error(
+        { userId, presentationId, status: response.status, error },
+        'Failed to add slides',
+      );
       return false;
     }
 
-    logger.info({ userId, presentationId, slideCount: slides.length }, 'Added slides to presentation');
+    logger.info(
+      { userId, presentationId, slideCount: slides.length },
+      'Added slides to presentation',
+    );
     return true;
   } catch (err) {
     logger.error({ userId, presentationId, err }, 'Error adding slides');
@@ -129,7 +141,7 @@ export async function addSlides(
  */
 export async function getPresentation(
   userId: string,
-  presentationId: string
+  presentationId: string,
 ): Promise<any | null> {
   const accessToken = await getAccessToken(userId);
   if (!accessToken) {
@@ -142,14 +154,17 @@ export async function getPresentation(
       `https://slides.googleapis.com/v1/presentations/${presentationId}`,
       {
         headers: {
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
-      }
+      },
     );
 
     if (!response.ok) {
       const error = await response.text();
-      logger.error({ userId, presentationId, status: response.status, error }, 'Failed to get presentation');
+      logger.error(
+        { userId, presentationId, status: response.status, error },
+        'Failed to get presentation',
+      );
       return null;
     }
 
@@ -167,7 +182,11 @@ export async function getPresentation(
 export async function createQuizPresentation(
   userId: string,
   title: string,
-  questions: Array<{ question: string; options: string[]; correctAnswer: string }>
+  questions: Array<{
+    question: string;
+    options: string[];
+    correctAnswer: string;
+  }>,
 ): Promise<{ presentationId: string; presentationUrl: string } | null> {
   // Create the presentation
   const result = await createPresentation(userId, title);
@@ -178,7 +197,7 @@ export async function createQuizPresentation(
   // Build slides for each question
   const slides = questions.map((q, index) => ({
     title: `Question ${index + 1}`,
-    content: `${q.question}\n\n${q.options.map((opt, i) => `${String.fromCharCode(65 + i)}) ${opt}`).join('\n')}`
+    content: `${q.question}\n\n${q.options.map((opt, i) => `${String.fromCharCode(65 + i)}) ${opt}`).join('\n')}`,
   }));
 
   // Add all slides

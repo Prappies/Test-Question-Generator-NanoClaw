@@ -1,44 +1,257 @@
-[17:52:59.003] [32mINFO[39m (34737): [36mStopped orphaned containers[39m
+[19:54:27.218] [32mINFO[39m (38027): [36mStopped orphaned containers[39m
     [35mcount[39m: 1
-    [35mnames[39m: ["nanoclaw-discord-general-1776206183806"]
-[17:52:59.007] [32mINFO[39m (34737): [36mDatabase initialized[39m
-[17:52:59.007] [32mINFO[39m (34737): [36mState loaded[39m
+    [35mnames[39m: ["nanoclaw-discord-general-1776214080186"]
+[19:54:27.222] [32mINFO[39m (38027): [36mDatabase initialized[39m
+[19:54:27.222] [32mINFO[39m (38027): [36mState loaded[39m
     [35mgroupCount[39m: 1
-[17:52:59.021] [32mINFO[39m (34737): [36mPublic OAuth callback URL set[39m
+[19:54:27.235] [32mINFO[39m (38027): [36mPublic OAuth callback URL set[39m
     [35murl[39m: "https://scarcity-uncorrupt-octopus.ngrok-free.dev/oauth/callback"
-[17:52:59.037] [32mINFO[39m (34737): [36mGoogle OAuth callback server listening on http://localhost:3737[39m
-[17:53:00.485] [32mINFO[39m (34737): [36mDiscord bot connected[39m
+[19:54:27.252] [32mINFO[39m (38027): [36mGoogle OAuth callback server listening on http://localhost:3737[39m
+[19:54:28.395] [32mINFO[39m (38027): [36mDiscord bot connected[39m
     [35musername[39m: "Anti-Yapper#4821"
     [35mid[39m: "1493311877315301529"
 
   Discord bot: Anti-Yapper#4821
   Use /chatid command or check channel IDs in Discord settings
 
-[17:53:00.487] [32mINFO[39m (34737): [36mRegistering Discord slash commands...[39m
-[17:53:00.717] [32mINFO[39m (34737): [36mDiscord slash commands registered successfully[39m
-[17:53:00.718] [32mINFO[39m (34737): [36mScheduler loop started[39m
-[17:53:00.720] [32mINFO[39m (34737): [36mIPC watcher started (per-group namespaces)[39m
-[17:53:00.722] [32mINFO[39m (34737): [36mNanoClaw running (default trigger: @Andy)[39m
-[17:53:30.772] [32mINFO[39m (34737): [36m[cleanup] Done — freed ~0K[39m
-[17:53:44.467] [32mINFO[39m (34737): [36mDiscord slash command stored[39m
+[19:54:28.397] [32mINFO[39m (38027): [36mRegistering Discord slash commands...[39m
+[19:54:29.270] [32mINFO[39m (38027): [36mDiscord slash commands registered successfully[39m
+[19:54:29.270] [32mINFO[39m (38027): [36mScheduler loop started[39m
+[19:54:29.271] [32mINFO[39m (38027): [36mIPC watcher started (per-group namespaces)[39m
+[19:54:29.272] [32mINFO[39m (38027): [36mNanoClaw running (default trigger: @Andy)[39m
+[19:54:59.321] [32mINFO[39m (38027): [36m[cleanup] Done — freed ~0K[39m
+[19:57:19.676] [32mINFO[39m (38027): [36mDiscord slash command stored[39m
     [35mchatJid[39m: "dc:1424256626881200130"
     [35mchatName[39m: "Org.ChemistryTutor’sWife's server #general"
     [35msender[39m: "Org.ChemistryTutor’sWife"
     [35mcommand[39m: "login"
-[17:53:44.752] [32mINFO[39m (34737): [36mNew messages[39m
+[19:57:21.407] [32mINFO[39m (38027): [36mNew messages[39m
     [35mcount[39m: 1
-[17:53:44.762] [32mINFO[39m (34737): [36mProcessing messages[39m
+[19:57:21.418] [32mINFO[39m (38027): [36mProcessing messages[39m
     [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
     [35mmessageCount[39m: 1
-[17:53:45.081] [33mWARN[39m (34737): [36mOneCLI gateway not reachable — container will have no credentials[39m
-    [35mcontainerName[39m: "nanoclaw-discord-general-1776207224979"
-[17:53:45.081] [32mINFO[39m (34737): [36mSpawning container agent[39m
+[19:57:21.910] [33mWARN[39m (38027): [36mOneCLI gateway not reachable — container will have no credentials[39m
+    [35mcontainerName[39m: "nanoclaw-discord-general-1776214641596"
+[19:57:21.911] [32mINFO[39m (38027): [36mSpawning container agent[39m
     [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
-    [35mcontainerName[39m: "nanoclaw-discord-general-1776207224979"
+    [35mcontainerName[39m: "nanoclaw-discord-general-1776214641596"
     [35mmountCount[39m: 7
     [35misMain[39m: false
-[17:53:49.893] [32mINFO[39m (34737): [36mAgent output: 25 chars[39m
+[19:57:34.224] [32mINFO[39m (38027): [36mAgent output: 262 chars[39m
     [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
-[17:53:50.183] [32mINFO[39m (34737): [36mDiscord slash command reply sent[39m
+[19:57:34.546] [32mINFO[39m (38027): [36mDiscord slash command reply sent[39m
     [35mjid[39m: "dc:1424256626881200130"
-    [35mlength[39m: 25
+    [35mlength[39m: 262
+[19:57:46.376] [32mINFO[39m (38027): [36mDiscord slash command stored[39m
+    [35mchatJid[39m: "dc:1424256626881200130"
+    [35mchatName[39m: "Org.ChemistryTutor’sWife's server #general"
+    [35msender[39m: "Org.ChemistryTutor’sWife"
+    [35mcommand[39m: "login"
+[19:57:47.442] [32mINFO[39m (38027): [36mNew messages[39m
+    [35mcount[39m: 1
+[20:01:14.472] [32mINFO[39m (38027): [36mAgent output: 198 chars[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+[20:01:14.996] [32mINFO[39m (38027): [36mDiscord slash command reply sent[39m
+    [35mjid[39m: "dc:1424256626881200130"
+    [35mlength[39m: 198
+[20:01:57.154] [32mINFO[39m (38027): [36mDiscord slash command stored[39m
+    [35mchatJid[39m: "dc:1424256626881200130"
+    [35mchatName[39m: "Org.ChemistryTutor’sWife's server #general"
+    [35msender[39m: "Org.ChemistryTutor’sWife"
+    [35mcommand[39m: "quiz"
+[20:01:57.636] [32mINFO[39m (38027): [36mNew messages[39m
+    [35mcount[39m: 1
+[20:04:43.549] [32mINFO[39m (38027): [36mDiscord slash command reply sent[39m
+    [35mjid[39m: "dc:1424256626881200130"
+    [35mlength[39m: 76
+[20:04:43.551] [32mINFO[39m (38027): [36mIPC message sent[39m
+    [35mchatJid[39m: "dc:1424256626881200130"
+    [35msourceGroup[39m: "discord_general"
+[20:05:14.685] [32mINFO[39m (38027): [36mAgent output: 2283 chars[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+[20:05:15.418] [32mINFO[39m (38027): [36mDiscord message sent[39m
+    [35mjid[39m: "dc:1424256626881200130"
+    [35mlength[39m: 2283
+[20:05:42.594] [32mINFO[39m (38027): [36mDiscord message stored[39m
+    [35mchatJid[39m: "dc:1424256626881200130"
+    [35mchatName[39m: "Org.ChemistryTutor’sWife's server #general"
+    [35msender[39m: "Org.ChemistryTutor’sWife"
+[20:05:43.819] [32mINFO[39m (38027): [36mNew messages[39m
+    [35mcount[39m: 1
+[20:05:46.794] [32mINFO[39m (38027): [36mAgent output: 280 chars[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+[20:05:47.291] [32mINFO[39m (38027): [36mDiscord message sent[39m
+    [35mjid[39m: "dc:1424256626881200130"
+    [35mlength[39m: 280
+[20:30:21.676] [32mINFO[39m (38027): [36mDiscord slash command stored[39m
+    [35mchatJid[39m: "dc:1424256626881200130"
+    [35mchatName[39m: "Org.ChemistryTutor’sWife's server #general"
+    [35msender[39m: "Org.ChemistryTutor’sWife"
+    [35mcommand[39m: "login"
+[20:30:22.903] [32mINFO[39m (38027): [36mNew messages[39m
+    [35mcount[39m: 1
+[20:30:38.562] [32mINFO[39m (38027): [36mAgent output: 78 chars[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+[20:30:39.049] [32mINFO[39m (38027): [36mDiscord slash command reply sent[39m
+    [35mjid[39m: "dc:1424256626881200130"
+    [35mlength[39m: 78
+[20:30:58.386] [32mINFO[39m (38027): [36mDiscord slash command stored[39m
+    [35mchatJid[39m: "dc:1424256626881200130"
+    [35mchatName[39m: "Org.ChemistryTutor’sWife's server #general"
+    [35msender[39m: "Org.ChemistryTutor’sWife"
+    [35mcommand[39m: "quiz"
+[20:30:58.936] [32mINFO[39m (38027): [36mNew messages[39m
+    [35mcount[39m: 1
+[20:34:17.753] [32mINFO[39m (38027): [36mDiscord slash command reply sent[39m
+    [35mjid[39m: "dc:1424256626881200130"
+    [35mlength[39m: 34
+[20:34:17.753] [32mINFO[39m (38027): [36mIPC message sent[39m
+    [35mchatJid[39m: "dc:1424256626881200130"
+    [35msourceGroup[39m: "discord_general"
+[20:34:44.649] [32mINFO[39m (38027): [36mAgent output: 2833 chars[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+[20:34:45.117] [32mINFO[39m (38027): [36mDiscord message sent[39m
+    [35mjid[39m: "dc:1424256626881200130"
+    [35mlength[39m: 2833
+[20:51:43.881] [32mINFO[39m (38027): [36mDiscord message stored[39m
+    [35mchatJid[39m: "dc:1424256626881200130"
+    [35mchatName[39m: "Org.ChemistryTutor’sWife's server #general"
+    [35msender[39m: "Org.ChemistryTutor’sWife"
+[20:51:44.103] [32mINFO[39m (38027): [36mNew messages[39m
+    [35mcount[39m: 1
+[21:18:55.256] [31mERROR[39m (38027): [36mContainer timeout, stopping gracefully[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+    [35mcontainerName[39m: "nanoclaw-discord-general-1776214641596"
+[21:18:56.837] [32mINFO[39m (38027): [36mContainer timed out after output (idle cleanup)[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+    [35mcontainerName[39m: "nanoclaw-discord-general-1776214641596"
+    [35mduration[39m: 4895247
+    [35mcode[39m: 137
+[21:19:53.157] [32mINFO[39m (38027): [36mDiscord message stored[39m
+    [35mchatJid[39m: "dc:1424256626881200130"
+    [35mchatName[39m: "Org.ChemistryTutor’sWife's server #general"
+    [35msender[39m: "Org.ChemistryTutor’sWife"
+[21:19:53.288] [32mINFO[39m (38027): [36mNew messages[39m
+    [35mcount[39m: 1
+[21:23:37.838] [32mINFO[39m (38027): [36mDiscord slash command stored[39m
+    [35mchatJid[39m: "dc:1424256626881200130"
+    [35mchatName[39m: "Org.ChemistryTutor’sWife's server #general"
+    [35msender[39m: "Org.ChemistryTutor’sWife"
+    [35mcommand[39m: "login"
+[21:23:39.454] [32mINFO[39m (38027): [36mNew messages[39m
+    [35mcount[39m: 1
+[21:23:39.462] [32mINFO[39m (38027): [36mProcessing messages[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+    [35mmessageCount[39m: 2
+[21:23:39.785] [33mWARN[39m (38027): [36mOneCLI gateway not reachable — container will have no credentials[39m
+    [35mcontainerName[39m: "nanoclaw-discord-general-1776219819659"
+[21:23:39.785] [32mINFO[39m (38027): [36mSpawning container agent[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+    [35mcontainerName[39m: "nanoclaw-discord-general-1776219819659"
+    [35mmountCount[39m: 7
+    [35misMain[39m: false
+[21:36:10.572] [32mINFO[39m (38027): [36mAgent output: 1201 chars[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+[21:36:10.875] [32mINFO[39m (38027): [36mDiscord slash command reply sent[39m
+    [35mjid[39m: "dc:1424256626881200130"
+    [35mlength[39m: 1201
+[21:39:48.677] [32mINFO[39m (38027): [36mDiscord message stored[39m
+    [35mchatJid[39m: "dc:1424256626881200130"
+    [35mchatName[39m: "Org.ChemistryTutor’sWife's server #general"
+    [35msender[39m: "Org.ChemistryTutor’sWife"
+[21:39:50.512] [32mINFO[39m (38027): [36mNew messages[39m
+    [35mcount[39m: 1
+[21:39:55.847] [32mINFO[39m (38027): [36mAgent output: 81 chars[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+[21:39:56.163] [32mINFO[39m (38027): [36mDiscord message sent[39m
+    [35mjid[39m: "dc:1424256626881200130"
+    [35mlength[39m: 81
+[21:40:52.619] [32mINFO[39m (38027): [36mDiscord message stored[39m
+    [35mchatJid[39m: "dc:1424256626881200130"
+    [35mchatName[39m: "Org.ChemistryTutor’sWife's server #general"
+    [35msender[39m: "Org.ChemistryTutor’sWife"
+[21:40:54.572] [32mINFO[39m (38027): [36mNew messages[39m
+    [35mcount[39m: 1
+[21:41:04.080] [32mINFO[39m (38027): [36mAgent output: 1541 chars[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+[21:41:06.532] [32mINFO[39m (38027): [36mDiscord message sent[39m
+    [35mjid[39m: "dc:1424256626881200130"
+    [35mlength[39m: 1541
+[21:41:49.001] [32mINFO[39m (38027): [36mDiscord message stored[39m
+    [35mchatJid[39m: "dc:1424256626881200130"
+    [35mchatName[39m: "Org.ChemistryTutor’sWife's server #general"
+    [35msender[39m: "Org.ChemistryTutor’sWife"
+[21:41:50.625] [32mINFO[39m (38027): [36mNew messages[39m
+    [35mcount[39m: 1
+[21:41:59.074] [32mINFO[39m (38027): [36mDiscord message stored[39m
+    [35mchatJid[39m: "dc:1424256626881200130"
+    [35mchatName[39m: "Org.ChemistryTutor’sWife's server #general"
+    [35msender[39m: "Org.ChemistryTutor’sWife"
+[21:42:00.637] [32mINFO[39m (38027): [36mNew messages[39m
+    [35mcount[39m: 1
+[21:42:07.443] [32mINFO[39m (38027): [36mAgent output: 1565 chars[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+[21:42:07.628] [32mINFO[39m (38027): [36mDiscord message sent[39m
+    [35mjid[39m: "dc:1424256626881200130"
+    [35mlength[39m: 1565
+[21:46:54.306] [32mINFO[39m (38027): [36mDiscord slash command stored[39m
+    [35mchatJid[39m: "dc:1424256626881200130"
+    [35mchatName[39m: "Org.ChemistryTutor’sWife's server #general"
+    [35msender[39m: "Org.ChemistryTutor’sWife"
+    [35mcommand[39m: "login"
+[21:46:54.846] [32mINFO[39m (38027): [36mNew messages[39m
+    [35mcount[39m: 1
+[21:46:58.964] [32mINFO[39m (38027): [36mAgent output: 78 chars[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+[21:46:59.138] [32mINFO[39m (38027): [36mDiscord slash command reply sent[39m
+    [35mjid[39m: "dc:1424256626881200130"
+    [35mlength[39m: 78
+[21:47:33.331] [32mINFO[39m (38027): [36mDiscord slash command stored[39m
+    [35mchatJid[39m: "dc:1424256626881200130"
+    [35mchatName[39m: "Org.ChemistryTutor’sWife's server #general"
+    [35msender[39m: "Org.ChemistryTutor’sWife"
+    [35mcommand[39m: "quiz"
+[21:47:34.885] [32mINFO[39m (38027): [36mNew messages[39m
+    [35mcount[39m: 1
+[21:48:12.473] [32mINFO[39m (38027): [36mAgent output: 2864 chars[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+[21:48:13.032] [32mINFO[39m (38027): [36mDiscord slash command reply sent[39m
+    [35mjid[39m: "dc:1424256626881200130"
+    [35mlength[39m: 2864
+[22:18:13.977] [32mINFO[39m (38027): [36mContainer completed (streaming mode)[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+    [35mduration[39m: 3274324
+    [35mnewSessionId[39m: "e2f132e4-d959-4b69-8ba3-7133284c0324"
+[22:22:06.978] [32mINFO[39m (38027): [36mDiscord slash command stored[39m
+    [35mchatJid[39m: "dc:1424256626881200130"
+    [35mchatName[39m: "Org.ChemistryTutor’sWife's server #general"
+    [35msender[39m: "Org.ChemistryTutor’sWife"
+    [35mcommand[39m: "login"
+[22:22:08.676] [32mINFO[39m (38027): [36mNew messages[39m
+    [35mcount[39m: 1
+[22:22:08.686] [32mINFO[39m (38027): [36mProcessing messages[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+    [35mmessageCount[39m: 1
+[22:22:08.957] [33mWARN[39m (38027): [36mOneCLI gateway not reachable — container will have no credentials[39m
+    [35mcontainerName[39m: "nanoclaw-discord-general-1776223328816"
+[22:22:08.957] [32mINFO[39m (38027): [36mSpawning container agent[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+    [35mcontainerName[39m: "nanoclaw-discord-general-1776223328816"
+    [35mmountCount[39m: 7
+    [35misMain[39m: false
+[22:22:17.585] [32mINFO[39m (38027): [36mAgent output: 78 chars[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+[22:22:17.932] [32mINFO[39m (38027): [36mDiscord slash command reply sent[39m
+    [35mjid[39m: "dc:1424256626881200130"
+    [35mlength[39m: 78
+[22:26:03.160] [32mINFO[39m (38027): [36mDiscord message stored[39m
+    [35mchatJid[39m: "dc:1424256626881200130"
+    [35mchatName[39m: "Org.ChemistryTutor’sWife's server #general"
+    [35msender[39m: "Org.ChemistryTutor’sWife"
+[22:26:04.857] [32mINFO[39m (38027): [36mNew messages[39m
+    [35mcount[39m: 1
+[22:26:11.905] [32mINFO[39m (38027): [36mAgent output: 654 chars[39m
+    [35mgroup[39m: "Org.ChemistryTutor'sWife's Server #general"
+[22:26:12.118] [32mINFO[39m (38027): [36mDiscord message sent[39m
+    [35mjid[39m: "dc:1424256626881200130"
+    [35mlength[39m: 654

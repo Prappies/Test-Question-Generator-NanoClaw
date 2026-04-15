@@ -29,7 +29,8 @@ if (!existsSync(TOKENS_DIR)) {
  */
 export function getOAuthUrl(userId: string): string {
   const envVars = readEnvFile(['GOOGLE_OAUTH_CLIENT_ID']);
-  const clientId = process.env.GOOGLE_OAUTH_CLIENT_ID || envVars.GOOGLE_OAUTH_CLIENT_ID;
+  const clientId =
+    process.env.GOOGLE_OAUTH_CLIENT_ID || envVars.GOOGLE_OAUTH_CLIENT_ID;
 
   if (!clientId) {
     throw new Error('GOOGLE_OAUTH_CLIENT_ID not configured');
@@ -57,10 +58,18 @@ export function getOAuthUrl(userId: string): string {
 /**
  * Exchange authorization code for tokens
  */
-export async function exchangeCodeForTokens(code: string): Promise<{ email: string; tokens: any }> {
-  const envVars = readEnvFile(['GOOGLE_OAUTH_CLIENT_ID', 'GOOGLE_OAUTH_CLIENT_SECRET']);
-  const clientId = process.env.GOOGLE_OAUTH_CLIENT_ID || envVars.GOOGLE_OAUTH_CLIENT_ID;
-  const clientSecret = process.env.GOOGLE_OAUTH_CLIENT_SECRET || envVars.GOOGLE_OAUTH_CLIENT_SECRET;
+export async function exchangeCodeForTokens(
+  code: string,
+): Promise<{ email: string; tokens: any }> {
+  const envVars = readEnvFile([
+    'GOOGLE_OAUTH_CLIENT_ID',
+    'GOOGLE_OAUTH_CLIENT_SECRET',
+  ]);
+  const clientId =
+    process.env.GOOGLE_OAUTH_CLIENT_ID || envVars.GOOGLE_OAUTH_CLIENT_ID;
+  const clientSecret =
+    process.env.GOOGLE_OAUTH_CLIENT_SECRET ||
+    envVars.GOOGLE_OAUTH_CLIENT_SECRET;
 
   if (!clientId || !clientSecret) {
     throw new Error('Google OAuth credentials not configured');
@@ -86,18 +95,21 @@ export async function exchangeCodeForTokens(code: string): Promise<{ email: stri
     throw new Error(`Token exchange failed: ${error}`);
   }
 
-  const tokens = await tokenResponse.json() as any;
+  const tokens = (await tokenResponse.json()) as any;
 
   // Get user email
-  const userinfoResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-    headers: { Authorization: `Bearer ${tokens.access_token}` },
-  });
+  const userinfoResponse = await fetch(
+    'https://www.googleapis.com/oauth2/v2/userinfo',
+    {
+      headers: { Authorization: `Bearer ${tokens.access_token}` },
+    },
+  );
 
   if (!userinfoResponse.ok) {
     throw new Error('Failed to get user info');
   }
 
-  const userinfo = await userinfoResponse.json() as any;
+  const userinfo = (await userinfoResponse.json()) as any;
 
   return {
     email: userinfo.email,
@@ -108,13 +120,19 @@ export async function exchangeCodeForTokens(code: string): Promise<{ email: stri
 /**
  * Store tokens for a user
  */
-export function storeUserTokens(userId: string, email: string, tokens: any): void {
+export function storeUserTokens(
+  userId: string,
+  email: string,
+  tokens: any,
+): void {
   const tokenPath = path.join(TOKENS_DIR, `${userId}.json`);
   const data: UserTokens = {
     email,
     access_token: tokens.access_token,
     refresh_token: tokens.refresh_token,
-    expires_at: tokens.expires_in ? Date.now() + tokens.expires_in * 1000 : undefined,
+    expires_at: tokens.expires_in
+      ? Date.now() + tokens.expires_in * 1000
+      : undefined,
   };
   writeFileSync(tokenPath, JSON.stringify(data, null, 2));
   logger.info({ userId, email }, 'Stored Google OAuth tokens');
@@ -155,9 +173,15 @@ export async function refreshAccessToken(userId: string): Promise<boolean> {
       return false;
     }
 
-    const envVars = readEnvFile(['GOOGLE_OAUTH_CLIENT_ID', 'GOOGLE_OAUTH_CLIENT_SECRET']);
-    const clientId = process.env.GOOGLE_OAUTH_CLIENT_ID || envVars.GOOGLE_OAUTH_CLIENT_ID;
-    const clientSecret = process.env.GOOGLE_OAUTH_CLIENT_SECRET || envVars.GOOGLE_OAUTH_CLIENT_SECRET;
+    const envVars = readEnvFile([
+      'GOOGLE_OAUTH_CLIENT_ID',
+      'GOOGLE_OAUTH_CLIENT_SECRET',
+    ]);
+    const clientId =
+      process.env.GOOGLE_OAUTH_CLIENT_ID || envVars.GOOGLE_OAUTH_CLIENT_ID;
+    const clientSecret =
+      process.env.GOOGLE_OAUTH_CLIENT_SECRET ||
+      envVars.GOOGLE_OAUTH_CLIENT_SECRET;
 
     if (!clientId || !clientSecret) {
       throw new Error('Google OAuth credentials not configured');
@@ -180,7 +204,7 @@ export async function refreshAccessToken(userId: string): Promise<boolean> {
       return false;
     }
 
-    const tokens = await response.json() as any;
+    const tokens = (await response.json()) as any;
 
     // Update the access token
     data.access_token = tokens.access_token;
@@ -233,7 +257,10 @@ export async function getAccessToken(userId: string): Promise<string | null> {
  */
 let callbackServer: http.Server | null = null;
 let publicCallbackUrl: string | null = null;
-const pendingAuths = new Map<string, (result: { email: string; error?: string }) => void>();
+const pendingAuths = new Map<
+  string,
+  (result: { email: string; error?: string }) => void
+>();
 
 export function setPublicCallbackUrl(url: string): void {
   publicCallbackUrl = url;
@@ -259,10 +286,15 @@ export function startOAuthCallbackServer(): void {
 
       if (error || !code || !state) {
         res.writeHead(400, { 'Content-Type': 'text/html' });
-        res.end('<h1>Authentication failed</h1><p>You can close this window.</p>');
+        res.end(
+          '<h1>Authentication failed</h1><p>You can close this window.</p>',
+        );
 
         if (state && pendingAuths.has(state)) {
-          pendingAuths.get(state)!({ email: '', error: error || 'Missing code' });
+          pendingAuths.get(state)!({
+            email: '',
+            error: error || 'Missing code',
+          });
           pendingAuths.delete(state);
         }
         return;
@@ -302,14 +334,19 @@ export function startOAuthCallbackServer(): void {
   });
 
   callbackServer.listen(3737, () => {
-    logger.info('Google OAuth callback server listening on http://localhost:3737');
+    logger.info(
+      'Google OAuth callback server listening on http://localhost:3737',
+    );
   });
 }
 
 /**
  * Wait for OAuth to complete for a user
  */
-export function waitForOAuth(userId: string, timeoutMs = 300000): Promise<{ email: string; error?: string }> {
+export function waitForOAuth(
+  userId: string,
+  timeoutMs = 300000,
+): Promise<{ email: string; error?: string }> {
   return new Promise((resolve) => {
     const timeout = setTimeout(() => {
       pendingAuths.delete(userId);

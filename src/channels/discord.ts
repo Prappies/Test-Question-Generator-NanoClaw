@@ -1,4 +1,14 @@
-import { Client, Events, GatewayIntentBits, Message, TextChannel, REST, Routes, SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
+import {
+  Client,
+  Events,
+  GatewayIntentBits,
+  Message,
+  TextChannel,
+  REST,
+  Routes,
+  SlashCommandBuilder,
+  ChatInputCommandInteraction,
+} from 'discord.js';
 
 import { ASSISTANT_NAME, TRIGGER_PATTERN } from '../config.js';
 import { readEnvFile } from '../env.js';
@@ -23,7 +33,8 @@ export class DiscordChannel implements Channel {
   private client: Client | null = null;
   private opts: DiscordChannelOpts;
   private botToken: string;
-  private pendingInteractions: Map<string, ChatInputCommandInteraction> = new Map();
+  private pendingInteractions: Map<string, ChatInputCommandInteraction> =
+    new Map();
 
   constructor(botToken: string, opts: DiscordChannelOpts) {
     this.botToken = botToken;
@@ -89,18 +100,20 @@ export class DiscordChannel implements Channel {
 
       // Handle attachments — store placeholders so the agent knows something was sent
       if (message.attachments.size > 0) {
-        const attachmentDescriptions = [...message.attachments.values()].map((att) => {
-          const contentType = att.contentType || '';
-          if (contentType.startsWith('image/')) {
-            return `[Image: ${att.name || 'image'}]`;
-          } else if (contentType.startsWith('video/')) {
-            return `[Video: ${att.name || 'video'}]`;
-          } else if (contentType.startsWith('audio/')) {
-            return `[Audio: ${att.name || 'audio'}]`;
-          } else {
-            return `[File: ${att.name || 'file'}]`;
-          }
-        });
+        const attachmentDescriptions = [...message.attachments.values()].map(
+          (att) => {
+            const contentType = att.contentType || '';
+            if (contentType.startsWith('image/')) {
+              return `[Image: ${att.name || 'image'}]`;
+            } else if (contentType.startsWith('video/')) {
+              return `[Video: ${att.name || 'video'}]`;
+            } else if (contentType.startsWith('audio/')) {
+              return `[Audio: ${att.name || 'audio'}]`;
+            } else {
+              return `[File: ${att.name || 'file'}]`;
+            }
+          },
+        );
         if (content) {
           content = `${content}\n${attachmentDescriptions.join('\n')}`;
         } else {
@@ -126,7 +139,13 @@ export class DiscordChannel implements Channel {
 
       // Store chat metadata for discovery
       const isGroup = message.guild !== null;
-      this.opts.onChatMetadata(chatJid, timestamp, chatName, 'discord', isGroup);
+      this.opts.onChatMetadata(
+        chatJid,
+        timestamp,
+        chatName,
+        'discord',
+        isGroup,
+      );
 
       // Only deliver full message for registered groups
       const group = this.opts.registeredGroups()[chatJid];
@@ -172,7 +191,8 @@ export class DiscordChannel implements Channel {
       const senderName =
         commandInteraction.member && 'displayName' in commandInteraction.member
           ? (commandInteraction.member.displayName as string)
-          : commandInteraction.user.displayName || commandInteraction.user.username;
+          : commandInteraction.user.displayName ||
+            commandInteraction.user.username;
       const sender = commandInteraction.user.id;
       const msgId = commandInteraction.id;
 
@@ -191,7 +211,9 @@ export class DiscordChannel implements Channel {
         content = `@${ASSISTANT_NAME} /login`;
       } else if (commandInteraction.commandName === 'quiz') {
         const url = commandInteraction.options.getString('url');
-        content = url ? `@${ASSISTANT_NAME} /quiz ${url}` : `@${ASSISTANT_NAME} /quiz`;
+        content = url
+          ? `@${ASSISTANT_NAME} /quiz ${url}`
+          : `@${ASSISTANT_NAME} /quiz`;
       }
 
       // Acknowledge the interaction immediately (ephemeral = only visible to user)
@@ -201,18 +223,29 @@ export class DiscordChannel implements Channel {
       this.pendingInteractions.set(channelId, commandInteraction);
 
       // Clean up after 15 minutes (Discord interaction token expires after 15 min)
-      setTimeout(() => {
-        this.pendingInteractions.delete(channelId);
-      }, 15 * 60 * 1000);
+      setTimeout(
+        () => {
+          this.pendingInteractions.delete(channelId);
+        },
+        15 * 60 * 1000,
+      );
 
       // Store chat metadata
       const isGroup = commandInteraction.guild !== null;
-      this.opts.onChatMetadata(chatJid, timestamp, chatName, 'discord', isGroup);
+      this.opts.onChatMetadata(
+        chatJid,
+        timestamp,
+        chatName,
+        'discord',
+        isGroup,
+      );
 
       // Only deliver for registered groups
       const group = this.opts.registeredGroups()[chatJid];
       if (!group) {
-        await commandInteraction.editReply('This channel is not registered with NanoClaw.');
+        await commandInteraction.editReply(
+          'This channel is not registered with NanoClaw.',
+        );
         this.pendingInteractions.delete(channelId);
         return;
       }
@@ -230,7 +263,12 @@ export class DiscordChannel implements Channel {
       });
 
       logger.info(
-        { chatJid, chatName, sender: senderName, command: commandInteraction.commandName },
+        {
+          chatJid,
+          chatName,
+          sender: senderName,
+          command: commandInteraction.commandName,
+        },
         'Discord slash command stored',
       );
     });
@@ -264,21 +302,21 @@ export class DiscordChannel implements Channel {
       new SlashCommandBuilder()
         .setName('quiz')
         .setDescription('Generate a quiz from a URL or PDF')
-        .addStringOption(option =>
-          option.setName('url')
-            .setDescription('URL to generate quiz from (or upload PDF as attachment)')
-            .setRequired(false)
+        .addStringOption((option) =>
+          option
+            .setName('url')
+            .setDescription(
+              'URL to generate quiz from (or upload PDF as attachment)',
+            )
+            .setRequired(false),
         ),
-    ].map(command => command.toJSON());
+    ].map((command) => command.toJSON());
 
     const rest = new REST().setToken(this.botToken);
 
     try {
       logger.info('Registering Discord slash commands...');
-      await rest.put(
-        Routes.applicationCommands(clientId),
-        { body: commands },
-      );
+      await rest.put(Routes.applicationCommands(clientId), { body: commands });
       logger.info('Discord slash commands registered successfully');
     } catch (error) {
       logger.error({ error }, 'Failed to register Discord slash commands');
@@ -310,7 +348,10 @@ export class DiscordChannel implements Channel {
           }
         }
         this.pendingInteractions.delete(channelId);
-        logger.info({ jid, length: text.length }, 'Discord slash command reply sent');
+        logger.info(
+          { jid, length: text.length },
+          'Discord slash command reply sent',
+        );
         return;
       }
 

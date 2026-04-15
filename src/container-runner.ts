@@ -272,6 +272,9 @@ async function buildContainerArgs(
 ): Promise<string[]> {
   const args: string[] = ['run', '-i', '--rm', '--name', containerName];
 
+  // Expose port 8000 for workspace-mcp OAuth callbacks
+  args.push('-p', '8000:8000');
+
   // Pass host timezone so container's local time matches the user's
   args.push('-e', `TZ=${TIMEZONE}`);
 
@@ -281,15 +284,33 @@ async function buildContainerArgs(
   }
 
   // Pass OAuth callback URL (will be set by ngrok or public domain)
-  const oauthCallbackUrl = process.env.OAUTH_CALLBACK_URL || 'http://localhost:3737/oauth/callback';
+  const oauthCallbackUrl =
+    process.env.OAUTH_CALLBACK_URL || 'http://localhost:3737/oauth/callback';
   args.push('-e', `OAUTH_CALLBACK_URL=${oauthCallbackUrl}`);
+
+  // Pass Anthropic API key directly when OneCLI is not available
+  if ((!ONECLI_URL || ONECLI_URL === '') && process.env.ANTHROPIC_API_KEY) {
+    args.push('-e', `ANTHROPIC_API_KEY=${process.env.ANTHROPIC_API_KEY}`);
+  }
 
   // Pass Google OAuth credentials for workspace-mcp
   if (process.env.GOOGLE_OAUTH_CLIENT_ID) {
-    args.push('-e', `GOOGLE_OAUTH_CLIENT_ID=${process.env.GOOGLE_OAUTH_CLIENT_ID}`);
+    args.push(
+      '-e',
+      `GOOGLE_OAUTH_CLIENT_ID=${process.env.GOOGLE_OAUTH_CLIENT_ID}`,
+    );
   }
   if (process.env.GOOGLE_OAUTH_CLIENT_SECRET) {
-    args.push('-e', `GOOGLE_OAUTH_CLIENT_SECRET=${process.env.GOOGLE_OAUTH_CLIENT_SECRET}`);
+    args.push(
+      '-e',
+      `GOOGLE_OAUTH_CLIENT_SECRET=${process.env.GOOGLE_OAUTH_CLIENT_SECRET}`,
+    );
+  }
+  if (process.env.WORKSPACE_MCP_REDIRECT_URI) {
+    args.push(
+      '-e',
+      `WORKSPACE_MCP_REDIRECT_URI=${process.env.WORKSPACE_MCP_REDIRECT_URI}`,
+    );
   }
 
   // OneCLI gateway handles credential injection — containers never see real secrets.
